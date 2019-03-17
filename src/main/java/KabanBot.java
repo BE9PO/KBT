@@ -4,19 +4,56 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class KabanBot extends TelegramLongPollingBot {
-
+    private static final String START = "/start";
+    private static final String HELP = "/help";
+    private static final String TRANSLATE = "/translate";
 
     public void onUpdateReceived(Update update) {
-        // We check if the update has a message and the message has text
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage message = new SendMessage() // Create a SendMessage object with mandatory fields
-                    .setChatId(update.getMessage().getChatId())
-                    .setText(update.getMessage().getText());
-            try {
-                execute(message); // Call method to send the message
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+        if (update.getMessage().hasText()) {
+            if (update.getMessage().getText().equals(START)) {
+                onStartMessage(update);
+            } else if (update.getMessage().getText().equals(HELP)) {
+                onHelpMessage(update);
+            } else if (update.getMessage().getText().contains(TRANSLATE)) {
+                translate(update);
             }
+        }
+    }
+
+    private void onStartMessage(Update update) {
+        SendMessage message = new SendMessage()
+                .setChatId(update.getMessage().getChatId());
+        String startMassage = "Прыветанне, гэта белурсая лаянка. Нацiснi \"Дапамога\", как убачыць што рабiць";
+        message.setText(startMassage);
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void onHelpMessage(Update update) {
+        SendMessage message = new SendMessage()
+                .setChatId(update.getMessage().getChatId());
+        String startMassage = "Вось што я раблю, курва.";
+        message.setText(startMassage);
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void translate(Update update) {
+        //TODO translator
+        SendMessage message = new SendMessage()
+                .setChatId(update.getMessage().getChatId());
+        String startMassage = "Перакладаю";
+        message.setText(startMassage);
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
